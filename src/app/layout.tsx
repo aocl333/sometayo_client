@@ -33,6 +33,7 @@ export default function RootLayout({
         />
         {/* 카카오맵: 동기 script만 document.write 허용. next/script 사용 시 비동기로 들어가서 에러 남 */}
         {KAKAO_KEY ? (
+          // eslint-disable-next-line @next/next/no-sync-scripts
           <script src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_KEY}`} />
         ) : null}
       </head>

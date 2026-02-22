@@ -93,7 +93,7 @@ export default function TicketRegisterPage() {
           <Card className={styles.guideCard}>
             <ul className={styles.guideList}>
               <li>홈쇼핑 구매 완료 후 문자로 전송됩니다.</li>
-              <li>'홈쇼핑 앱 &gt; 마이페이지 &gt; 쿠폰함'에서 확인하실 수 있습니다.</li>
+              <li>&apos;홈쇼핑 앱 &gt; 마이페이지 &gt; 쿠폰함&apos;에서 확인하실 수 있습니다.</li>
               <li>코드 분실 시 고객센터로 문의하세요.</li>
             </ul>
           </Card>
