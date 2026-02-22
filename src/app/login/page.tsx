@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { Button } from '@/components/ui';
@@ -18,7 +19,7 @@ const ERROR_MESSAGES: Record<string, string> = {
   Default: '로그인 중 오류가 났습니다. 다시 시도해 주세요.',
 };
 
-export default function LoginPage() {
+function LoginContent() {
   const searchParams = useSearchParams();
   const errorCode = searchParams.get('error');
   const errorDescription = searchParams.get('error_description');
@@ -76,5 +77,13 @@ export default function LoginPage() {
         </div>
       </div>
     </MobileLayout>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<MobileLayout hideBottomNav><div className={styles.container} /></MobileLayout>}>
+      <LoginContent />
+    </Suspense>
   );
 }
