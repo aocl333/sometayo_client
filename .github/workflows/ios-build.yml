@@ -25,8 +25,13 @@ jobs:
       - name: Build Next.js
         run: npm run build
         env:
-          # GitHub Secrets에 추가 권장 (Settings > Secrets > Actions)
           NEXT_PUBLIC_KAKAO_MAP_KEY: ${{ secrets.NEXT_PUBLIC_KAKAO_MAP_KEY || 'placeholder-for-ci' }}
+
+      # output: export 없음 → out/ 미생성. 서버 URL 모드용 최소 shell 생성
+      - name: Create Capacitor web shell
+        run: |
+          mkdir -p out
+          echo '<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>로딩중</title></head><body><p>로딩 중...</p></body></html>' > out/index.html
 
       - name: Add iOS platform
         run: npx cap add ios
@@ -34,6 +39,9 @@ jobs:
 
       - name: Sync Capacitor
         run: npx cap sync ios
+        env:
+          # 앱이 이 URL에서 로드 (NextAuth 등 서버 기능 사용)
+          CAPACITOR_SERVER_URL: ${{ secrets.CAPACITOR_SERVER_URL || 'https://sumtayo.co.kr' }}
 
       - name: Install CocoaPods
         run: |

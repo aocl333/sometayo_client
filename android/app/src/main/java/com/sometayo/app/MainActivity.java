@@ -1,4 +1,4 @@
-package com.sometayo.app;
+package com.sumtayo.app;
 
 import com.getcapacitor.BridgeActivity;
 

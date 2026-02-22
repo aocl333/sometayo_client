@@ -7,7 +7,7 @@ const devServer = process.env.CAPACITOR_DEV_SERVER;
 const serverUrl = process.env.CAPACITOR_SERVER_URL;
 
 const config: CapacitorConfig = {
-  appId: 'com.sometayo.app',
+  appId: 'com.sumtayo.app',
   appName: '썸타요',
   webDir: 'out',
   server: {

@@ -20,7 +20,7 @@ export default function MyPage() {
   const router = useRouter();
   const { data: session } = useSession();
   const { stats } = mockUser;
-  
+
   // 로그인한 사용자 이름 (카카오 닉네임 또는 기본값)
   const userName = session?.user?.name || mockUser.name;
 
@@ -57,7 +57,11 @@ export default function MyPage() {
             </div>
             <div className={styles.profileInfo}>
               <h2 className={styles.userName}>{userName}</h2>
-              <button className={styles.profileBtn}>
+              <button
+                type="button"
+                className={styles.profileBtn}
+                onClick={() => router.push('/mypage/profile')}
+              >
                 프로필 보기 <Image src="/images/ico_arrow_right_gr.svg" alt="" width={15} height={15} />
               </button>
             </div>
