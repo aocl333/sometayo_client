@@ -1,0 +1,185 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.main {
+  padding-bottom: 20px;
+}
+
+// 통계 섹션
+.statsSection {
+  padding: 20px 16px;
+  background: white;
+  border-bottom: 8px solid $gray-100;
+}
+
+.statsCard {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: #FFF0ED;
+  border-radius: $radius-lg;
+}
+
+.statsIconWrapper {
+  @include flex-center;
+  width: 36px;
+  height: 36px;
+  background:$primary;
+  border-radius: $radius-md;
+  flex-shrink: 0;
+}
+
+.statsInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.statsValue {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.statsLabel {
+  font-size: 12px;
+  color: $gray-700;
+}
+
+// 리뷰 섹션
+.reviewSection {
+  padding: 16px;
+}
+
+.reviewList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reviewCard {
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+// 가맹점 정보
+.storeInfo {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid $gray-100;
+  margin-bottom: 12px;
+}
+
+.storeImage {
+  width: 40px;
+  height: 40px;
+  border-radius: $radius-md;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: $gray-100;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.storeImagePlaceholder {
+  width: 100%;
+  height: 100%;
+  background: $gray-200;
+}
+
+.storeDetail {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.storeName {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.storeAddress {
+  font-size: 13px;
+  color: $gray-700;
+}
+
+// 리뷰 내용
+.reviewContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reviewRating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.reviewDate {
+  margin-left: 8px;
+  font-size: 12px;
+  color: $gray-700;
+}
+
+.reviewText {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.reviewImages {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.imageThumb {
+  width: 60px;
+  height: 60px;
+  border-radius: $radius-md;
+  overflow: hidden;
+  background: $gray-100;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.imagePlaceholder {
+  width: 100%;
+  height: 100%;
+  background: $gray-200;
+}
+
+// 빈 상태
+.emptyState {
+  @include flex-column;
+  @include flex-center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.emptyIcon {
+  color: $gray-300;
+  margin-bottom: 16px;
+}
+
+.emptyText {
+  font-size: 16px;
+  font-weight: 600;
+  color: $gray-600;
+  margin-bottom: 8px;
+}
+
+.emptySubText {
+  font-size: 14px;
+  color: $gray-400;
+}

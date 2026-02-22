@@ -1,0 +1,74 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.badge {
+  @include badge-base;
+  gap: 2px;
+}
+
+// Sizes
+.sm {
+  padding: 3px 6px;
+  font-size: 11px;
+}
+
+.md {
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+// Variants
+.default {
+  background: $gray-100;
+  color: $gray-700;
+}
+
+.primary {
+  background: $primary-bg;
+  color: $primary;
+}
+
+.success {
+  background: rgba($success, 0.1);
+  color: $success;
+}
+
+.warning {
+  background: rgba($warning, 0.1);
+  color: $warning;
+}
+
+.error {
+  background: rgba($error, 0.1);
+  color: $error;
+}
+
+.gold {
+  background: rgba(255, 174, 0, 0.15);
+  color: #FFAE00;
+}
+
+.silver {
+  background: rgba(165, 165, 165, 0.15);
+  color: #A5A5A5;
+}
+
+.bronze {
+  background: rgba(205, 127, 50, 0.15);
+  color: #CD7F32;
+}
+
+.available {
+  background: rgb(76, 175, 80, 0.1);
+  color: #4CAF50;
+}
+
+.used {
+  background: #FFEDE6;
+  color: #FF6B35;
+}
+
+.expired {
+  background: #eee;
+  color: #828282;
+}

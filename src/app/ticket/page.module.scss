@@ -1,0 +1,121 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.main {
+  padding: 16px;
+  padding-bottom: 20px;
+}
+
+.ticketCard {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.qrSection {
+  padding: 20px 0;
+}
+
+.qrCode {
+  @include flex-center;
+  margin-bottom: 12px;
+  color: $gray-900;
+}
+
+.qrHint {
+  font-size: 13px;
+  color: $gray-500;
+}
+
+.ticketInfo {
+  padding-top: 20px;
+  border-top: 1px solid $gray-200;
+  @include flex-column;
+  gap: 12px;
+}
+
+.infoRow {
+  @include flex-between;
+}
+
+.infoLabel {
+  font-size: 14px;
+  color: $gray-600;
+}
+
+.infoValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: $gray-800;
+}
+
+.section {
+  margin-bottom: 24px;
+}
+
+.sectionTitle {
+  @include section-title;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.statCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.iconWrapper {
+  @include flex-center;
+  width: 40px;
+  height: 40px;
+  background: $primary-bg;
+  border-radius: $radius-md;
+  color: $primary;
+  flex-shrink: 0;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 12px;
+  color: $gray-500;
+}
+
+.count {
+  font-size: 18px;
+  font-weight: 700;
+  color: $gray-900;
+}
+
+.guideCard {
+  background: $gray-100 !important;
+  border: none !important;
+}
+
+.guideList {
+  @include flex-column;
+  gap: 7px;
+
+  li {
+    position: relative;
+    padding-left: 13px;
+    font-size: 13px;
+    color: $gray-700;
+
+    &::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: $gray-600;
+    }
+  }
+}

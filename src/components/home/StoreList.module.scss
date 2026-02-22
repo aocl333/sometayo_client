@@ -1,0 +1,82 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.container {
+  padding: 16px;
+}
+
+.header {
+  @include section-header;
+}
+
+.title {
+  @include section-title;
+  margin-bottom: 0;
+}
+
+.viewAll {
+  font-size: 13px;
+  font-weight: 500;
+  color: $gray-700;
+}
+
+.list {
+  @include flex-column;
+  gap: 12px;
+}
+
+.storeCard {
+  @include flex-between;
+  align-items: center;
+}
+
+.storeInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.storeImageWrap {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: $radius-md;
+  background: $gray-200;
+}
+
+.details {
+  @include flex-column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.storeName {
+  font-size: 15px;
+  font-weight: 600;
+  color: $gray-900;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rating,
+.distance {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 12px;
+  color: $gray-700;
+}
+
+.rating {
+  color: $gray-700;
+}
+
+.badgeWrap {
+  flex-shrink: 0;
+  margin-top: 17px;
+}

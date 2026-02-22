@@ -1,0 +1,210 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - $header-height - $bottom-nav-height);
+}
+
+.filterBar {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  background: white;
+  border-bottom: 1px solid $gray-100;
+}
+
+.filterBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: $gray-100;
+  border-radius: $radius-full;
+  font-size: 13px;
+  font-weight: 500;
+  color: $gray-600;
+  transition: all 0.2s;
+
+  &.active {
+    background: $primary;
+    color: white;
+  }
+}
+
+.mapContainer {
+  flex: 1;
+  position: relative;
+  background: $gray-200;
+  min-height: 0;
+
+  // KakaoMap 내부 wrapper/button 스타일
+  :global(.map-wrapper) {
+    position: absolute;
+    inset: 0;
+  }
+
+  :global(.map-container) {
+    width: 100%;
+    height: 100%;
+  }
+
+  :global(.map-loading) {
+    position: absolute;
+    inset: 0;
+    @include flex-center;
+    background: rgba(255, 255, 255, 0.9);
+    p {
+      font-size: 14px;
+      color: $gray-600;
+    }
+  }
+
+  :global(.map-error) {
+    @include flex-center;
+    @include flex-column;
+    height: 100%;
+    gap: 8px;
+    padding: 20px;
+    text-align: center;
+    p {
+      font-size: 16px;
+      font-weight: 600;
+      color: $gray-700;
+    }
+    span {
+      font-size: 13px;
+      color: $gray-500;
+    }
+  }
+
+  :global(.map-location-error) {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    z-index: 10;
+    padding: 10px 14px;
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    border-radius: 8px;
+    text-align: center;
+    p {
+      margin: 0;
+      font-size: 13px;
+    }
+  }
+
+  :global(.map-my-location-btn) {
+    position: absolute;
+    bottom: 50px;
+    right: 25px;
+    @include flex-center;
+    width: 48px;
+    height: 48px;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    box-shadow: $shadow-lg;
+    color: $gray-700;
+    cursor: pointer;
+    transition: bottom 0.25s ease;
+    z-index: 10;
+
+    img {
+      display: block;
+    }
+  }
+
+  &.mapContainerWithSheet :global(.map-my-location-btn) {
+    bottom: 160px;
+  }
+}
+
+.bottomSheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  background: white;
+  border-radius: $radius-xl $radius-xl 0 0;
+  padding: 30px 15px;
+  padding-bottom: calc($bottom-nav-height + 15px + $safe-area-bottom);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.closeBtn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  @include flex-center;
+  width: 24px;
+  height: 24px;
+  background: $gray-200;
+  border-radius: 50%;
+  color: $gray-500;
+  z-index: 1;
+}
+
+.sheetContent {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  
+  button {
+    align-self: center;
+    padding: 8px 14px !important;
+    font-size: 13px !important;
+    height: 32px !important;
+    min-height: 32px;
+    gap: 2px;
+  }
+}
+
+.sheetIcon {
+  @include flex-center;
+  width: 74px;
+  height: 74px;
+  background: $gray-100;
+  border-radius: $radius-lg;
+  flex-shrink: 0;
+  padding: 12px;
+}
+
+.sheetInfo {
+  flex: 1;
+  min-width: 0;
+
+  h3 {
+    font-size: 17px;
+    font-weight: 600;
+    color: $gray-900;
+    margin-bottom: 2px;
+    @include text-ellipsis;
+  }
+}
+
+.sheetMeta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.rating,
+.distance {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 13px;
+  color: $gray-700;
+}
+
+.treasureHint {
+  font-size: 11px;
+  font-weight: 500;
+  color: $gray-700;
+}

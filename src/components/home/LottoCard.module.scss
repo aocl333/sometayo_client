@@ -1,0 +1,85 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.container {
+  padding: 0 16px;
+}
+
+.card {
+  background: $primary;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.header {
+  @include flex-between;
+  margin-bottom: 20px;
+}
+
+.greeting {
+  .name {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 2px;
+  }
+
+  .message {
+    font-size: 18px;
+    font-weight: 700;
+  }
+}
+
+.dday {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 6px 12px;
+  border-radius: $radius-full;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.balls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.ball {
+  @include flex-center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: 700;
+  transition: all 0.2s;
+}
+
+.filled {
+  background: white;
+  color: $primary;
+}
+
+.empty {
+  background: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.footer {
+  @include flex-between;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.prize {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.cta {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  gap: 2px;
+}

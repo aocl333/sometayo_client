@@ -1,0 +1,18 @@
+.starRating {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.star {
+  flex-shrink: 0;
+
+  &.filled {
+    opacity: 1;
+  }
+
+  &.empty {
+    opacity: 0.3;
+    filter: grayscale(100%);
+  }
+}

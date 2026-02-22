@@ -1,0 +1,146 @@
+@use 'variables' as *;
+
+// Mobile Container
+@mixin mobile-container {
+  max-width: $max-width;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: white;
+  position: relative;
+}
+
+// Flex utilities
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// Text ellipsis
+@mixin text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin text-ellipsis-multi($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Safe area padding
+@mixin safe-area-bottom {
+  padding-bottom: calc($bottom-nav-height + $safe-area-bottom);
+}
+
+// Button base
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Card base
+@mixin card-base {
+  background: white;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+  border: 1px solid $gray-200;
+}
+
+// Input base
+@mixin input-base {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid $gray-200;
+  border-radius: $radius-md;
+  font-size: 16px;
+  transition: border-color 0.2s;
+  
+  &:focus {
+    outline: none;
+    border-color: $primary;
+  }
+  
+  &::placeholder {
+    color: $gray-400;
+  }
+}
+
+// Badge base
+@mixin badge-base {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: $radius-full;
+}
+
+// Skeleton loading
+@mixin skeleton {
+  background: linear-gradient(90deg, $gray-100 25%, $gray-200 50%, $gray-100 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// Section Styles (공통)
+@mixin section {
+  margin-bottom: 24px;
+}
+
+@mixin section-header {
+  @include flex-between;
+  margin-bottom: 14px;
+}
+
+@mixin section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: $gray-900;
+  margin-bottom: 10px;
+}
+
+// gap이 있는 리스트 컨테이너용 (첫 번째 자식 타이틀 margin 제거)
+@mixin list-with-title {
+  @include flex-column;
+  gap: 12px;
+
+  > *:first-child {
+    margin-bottom: 0;
+  }
+}

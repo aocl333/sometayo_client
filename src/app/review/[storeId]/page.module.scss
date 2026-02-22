@@ -1,0 +1,198 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.main {
+  padding: 16px;
+}
+
+.storeCard {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.storeIcon {
+  @include flex-center;
+  width: 56px;
+  height: 56px;
+  background: $gray-100;
+  border-radius: $radius-lg;
+  font-size: 28px;
+}
+
+.storeInfo {
+  flex: 1;
+}
+
+.storeName {
+  font-size: 17px;
+  font-weight: 600;
+  color: $gray-900;
+  margin-bottom: 4px;
+}
+
+.storeAddress {
+  font-size: 13px;
+  color: $gray-500;
+}
+
+.section {
+  @include section;
+}
+
+.sectionTitle {
+  @include section-title;
+}
+
+.stars {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.starBtn {
+  padding: 4px;
+  transition: transform 0.2s;
+
+  &:active {
+    transform: scale(0.9);
+  }
+}
+
+.ratingText {
+  text-align: center;
+  font-size: 15px;
+  color: $gray-600;
+}
+
+.textarea {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid $gray-200;
+  border-radius: $radius-lg;
+  font-size: 15px;
+  line-height: 1.6;
+  resize: none;
+  transition: border-color 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: $primary;
+  }
+
+  &::placeholder {
+    color: $gray-400;
+  }
+}
+
+.charCount {
+  margin-top: 8px;
+  font-size: 13px;
+  color: $gray-400;
+  text-align: right;
+}
+
+.imageGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.imageItem {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: $radius-md;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.removeBtn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  @include flex-center;
+  width: 22px;
+  height: 22px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  color: white;
+}
+
+.addImageBtn {
+  @include flex-column;
+  @include flex-center;
+  aspect-ratio: 1;
+  gap: 6px;
+  background: $gray-100;
+  border: 1px dashed $gray-300;
+  border-radius: $radius-md;
+  color: $gray-400;
+  transition: all 0.2s;
+
+  span {
+    font-size: 12px;
+  }
+}
+
+.notice {
+  margin-bottom: 24px;
+  padding: 14px 16px;
+  background: $primary-bg;
+  border-radius: $radius-lg;
+
+  p {
+    font-size: 14px;
+    color: $primary-dark;
+    text-align: center;
+  }
+}
+
+.submitArea {
+  padding-bottom: 20px;
+}
+
+// Success Modal
+.successModal {
+  @include flex-column;
+  @include flex-center;
+  text-align: center;
+  padding: 20px 0;
+
+  h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: $gray-900;
+    margin-bottom: 16px;
+  }
+}
+
+.successIcon {
+  color: $success;
+  margin-bottom: 16px;
+}
+
+.reward {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px;
+  background: $gold-bg;
+  border-radius: $radius-lg;
+  margin-bottom: 24px;
+
+  span {
+    font-size: 15px;
+    color: $gray-800;
+  }
+}
+
+.rewardIcon {
+  font-size: 24px;
+}

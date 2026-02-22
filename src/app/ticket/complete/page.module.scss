@@ -1,0 +1,123 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.main {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - $header-height);
+  background: white;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 20px 20px;
+}
+
+// 성공 아이콘
+.iconWrapper {
+  @include flex-center;
+  width: 80px;
+  height: 80px;
+  background: #E7F5E9;
+  border-radius: 50%;
+  margin-bottom: 24px;
+}
+
+// 완료 메시지
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  color: $gray-900;
+  margin-bottom: 4px;
+}
+
+.description {
+  font-size: 14px;
+  color: $gray-500;
+  margin-bottom: 32px;
+}
+
+// 티켓 정보 카드 (티켓 모양)
+.ticketCard {
+  position: relative;
+  width: 100%;
+  padding: 24px 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  border: 1px solid #EEEEEE;
+  box-shadow: 0 4px 12px 2px rgba(0, 0, 0, 0.05);
+
+  // 왼쪽 반원 노치
+  &::before {
+    content: '';
+    position: absolute;
+    left: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: inset -2px 0 4px rgba(0, 0, 0, 0.06);
+  }
+
+  // 오른쪽 반원 노치
+  &::after {
+    content: '';
+    position: absolute;
+    right: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: inset 2px 0 4px rgba(0, 0, 0, 0.06);
+  }
+}
+
+.vendor {
+  font-size: 13px;
+  font-weight: 600;
+  color: $primary;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.ticketName {
+  font-size: 18px;
+  font-weight: 700;
+  color: $gray-900;
+  margin-bottom: 16px;
+}
+
+.dateRow {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  padding-top: 16px;
+  border-top: none;
+  background-image: linear-gradient(to right, #ddd 50%, transparent 50%);
+  background-size: 12px 1px;
+  background-repeat: repeat-x;
+  background-position: top;
+
+  span {
+    font-size: 13px;
+    color: $gray-600;
+  }
+}
+
+// 하단 버튼
+.bottomButton {
+  padding: 16px 20px;
+  padding-bottom: calc(16px + $safe-area-bottom);
+  background: white;
+  border-top: 1px solid #eee;
+}

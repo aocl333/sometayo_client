@@ -1,0 +1,41 @@
+{
+  "name": "sometayo-client",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "dev:mobile": "next dev -H 0.0.0.0",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "build:app": "next build && npx cap sync",
+    "build:android": "node -e \"require('fs').mkdirSync('out',{recursive:true});if(!require('fs').existsSync('out/index.html'))require('fs').writeFileSync('out/index.html','<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content=width=device-width,initial-scale=1><title>로딩중</title></head><body><p>로딩중...</p></body></html>')\" && npx cap sync android",
+    "open:android": "npx cap open android",
+    "open:ios": "npx cap open ios",
+    "android:dev": "npx cap run android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.0.2",
+    "@capacitor/cli": "^8.0.2",
+    "@capacitor/core": "^8.0.2",
+    "@capacitor/ios": "^8.0.2",
+    "dayjs": "^1.11.11",
+    "framer-motion": "^11.2.0",
+    "lucide-react": "^0.395.0",
+    "next": "^14.2.0",
+    "next-auth": "^4.24.13",
+    "qrcode.react": "^4.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sass": "^1.77.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "dotenv": "^16.4.5",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.0",
+    "typescript": "^5.4.0"
+  }
+}

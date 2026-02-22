@@ -1,0 +1,50 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.container {
+  padding: 12px 16px;
+}
+
+.card {
+  @include flex-between;
+  cursor: pointer;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.iconWrapper {
+  @include flex-center;
+  width: 40px;
+  height: 40px;
+  background: $primary-bg;
+  border-radius: $radius-md;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 12px;
+  color: $gray-500;
+}
+
+.count {
+  font-size: 18px;
+  font-weight: 700;
+  color: $gray-900;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: $primary;
+  font-size: 13px;
+  font-weight: 600;
+}

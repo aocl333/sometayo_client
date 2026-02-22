@@ -1,0 +1,60 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.header {
+  @include flex-between;
+  height: $header-height;
+  padding: 0 16px;
+  background: white;
+  border-bottom: 1px solid $gray-200;
+  position: sticky;
+  top: 0;
+  z-index: $z-dropdown;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.backButton {
+  @include flex-center;
+  width: 40px;
+  height: 40px;
+  margin-left: -8px;
+  color: $gray-900;
+  border-radius: $radius-full;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: $gray-900;
+}
+
+.iconButton {
+  @include flex-center;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  color: $gray-700;
+  border-radius: $radius-full;
+  transition: background 0.2s;
+}
+
+.badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  background: $error;
+  border-radius: 50%;
+}

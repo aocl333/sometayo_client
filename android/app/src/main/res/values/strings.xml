@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">썸타요</string>
+    <string name="title_activity_main">썸타요</string>
+    <string name="package_name">com.sometayo.app</string>
+    <string name="custom_url_scheme">com.sometayo.app</string>
+</resources>

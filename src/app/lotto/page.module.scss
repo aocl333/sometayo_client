@@ -1,0 +1,330 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.main {
+  padding: 16px;
+  padding-bottom: 20px;
+}
+
+.roundCard {
+  background: $primary;
+  color: white;
+  border: none;
+  margin-bottom: 24px;
+}
+
+.roundTop {
+  @include flex-between;
+  align-items: center;
+}
+
+.roundLabel {
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.95;
+}
+
+.prize {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.dday {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border: 1px solid #fff;
+  border-radius: $radius-full;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.drawDate {
+  font-size: 12px;
+  opacity: 0.9;
+  margin-top: 0;
+}
+
+.section {
+  @include section;
+}
+
+.sectionHeader {
+  @include section-header;
+
+  .sectionTitle {
+    margin-bottom: 0;
+  }
+}
+
+.sectionTitle {
+  @include section-title;
+}
+
+// 티켓 리스트 (카드형)
+.ticketList {
+  @include flex-column;
+  gap: 12px;
+}
+
+.ticketCard {
+  padding: 16px;
+  transition: all 0.2s;
+
+  &.complete {
+    background: linear-gradient(135deg, rgba($primary, 0.05) 0%, rgba($primary, 0.02) 100%);
+    border: 1px solid $primary;
+  }
+}
+
+.ticketHeader {
+  @include flex-between;
+  margin-bottom: 14px;
+}
+
+.ticketLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: $gray-800;
+}
+
+.ticketNum {
+  @include flex-center;
+  width: 20px;
+  height: 20px;
+  background: $gray-200;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+  color: $gray-600;
+}
+
+.completeIcon {
+  @include flex-center;
+  width: 20px;
+  height: 20px;
+  background: $primary;
+  border-radius: 50%;
+  color: white;
+}
+
+.ticketStatus {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border: 1px solid $gray-600;
+  border-radius: $radius-full;
+  font-size: 12px;
+  font-weight: 500;
+  color: $gray-600;
+
+  .complete & {
+    border: 1px solid $primary;
+    color: $primary;
+  }
+}
+
+.ticketBalls {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.ball {
+  @include flex-center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.filled {
+  color: white;
+}
+
+.empty {
+  background: $gray-100;
+  color: $gray-600;
+  border: 2px dashed #b3b3b3;
+}
+
+.progressArea {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.progressBar {
+  flex: 1;
+  height: 8px;
+  background: $gray-200;
+  border-radius: $radius-full;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: $primary;
+  border-radius: $radius-full;
+  transition: width 0.3s ease;
+}
+
+// 번호 획득 방법 카드
+.methodCards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.methodCard {
+  @include flex-column;
+  @include flex-center;
+  padding: 16px 12px;
+  border: 1px solid $gray-200;
+  border-radius: $radius-lg;
+  gap: 10px;
+  transition: all 0.2s;
+}
+
+.methodIcon {
+  @include flex-center;
+  width: 38px;
+  height: 38px;
+  border-radius: $radius-lg;
+}
+
+.methodInfo {
+  @include flex-column;
+  align-items: center;
+  gap: 2px;
+}
+
+.methodTitle {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.methodDesc {
+  font-size: 12px;
+  color: $gray-600;
+}
+
+.historySlider {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.sliderArrow {
+  @include flex-center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: $gray-600;
+  cursor: pointer;
+  border-radius: $radius-full;
+
+  &:hover:not(:disabled) {
+    background: $gray-100;
+    color: $gray-900;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.sliderHeader {
+  @include flex-column;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+}
+
+.sliderRound {
+  font-size: 16px;
+  font-weight: 700;
+  color: $gray-900;
+}
+
+.sliderDate {
+  font-size: 13px;
+  color: $gray-600;
+}
+
+.historyCardWrapper {
+  min-height: 180px;
+  width: 100%;
+  position: relative;
+}
+
+.historyCard {
+  width: 100%;
+}
+
+.numbersRow {
+  @include flex-column;
+  gap: 10px;
+}
+
+.numbersGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.numbersLabel {
+  font-size: 12px;
+  font-weight: 700;
+  min-width: 50px;
+}
+
+.smallBalls {
+  display: flex;
+  gap: 6px;
+}
+
+.smallBall {
+  @include flex-center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+}
+
+.historyFooter {
+  @include flex-between;
+  align-items: center;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid $gray-200;
+}
+
+.prizeWon {
+  font-size: 12px;
+  font-weight: 600;
+  color: $primary;
+}
+
+.matchCount {
+  font-size: 11px;
+  font-weight: 600;
+  color: $primary;
+  background: $primary-bg;
+  padding: 3px 8px;
+  border-radius: $radius-full;
+}

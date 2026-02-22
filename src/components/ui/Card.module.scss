@@ -1,0 +1,31 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.card {
+  @include card-base;
+}
+
+.padding-none {
+  padding: 0;
+}
+
+.padding-sm {
+  padding: 14px;
+}
+
+.padding-md {
+  padding: 16px;
+}
+
+.padding-lg {
+  padding: 20px;
+}
+
+.hoverable {
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:active {
+    transform: translateY(0);
+  }
+}

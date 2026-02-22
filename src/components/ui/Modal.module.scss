@@ -1,0 +1,54 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: $z-modal;
+  @include flex-center;
+  padding: 20px;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 350px;
+  max-height: calc(100vh - 40px);
+  background: white;
+  border-radius: $radius-xl;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  @include flex-between;
+  padding: 16px 20px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: $gray-900;
+}
+
+.closeButton {
+  @include flex-center;
+  width: 32px;
+  height: 32px;
+  margin-right: -8px;
+  margin-left: auto;
+  color: $gray-500;
+  border-radius: $radius-full;
+}
+
+.content {
+  padding: 20px;
+  overflow-y: auto;
+}

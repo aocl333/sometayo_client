@@ -1,0 +1,105 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.main {
+  padding: 24px 20px;
+  background: #f5f5f5;
+  min-height: calc(100vh - $header-height);
+}
+
+// 페이지 타이틀 (공통 스타일)
+.pageTitle {
+  font-size: 22px;
+  font-weight: 700;
+  color: $gray-900;
+  line-height: 1.4;
+  margin-bottom: 24px;
+}
+
+// 폼 카드
+.inputCard {
+  background: white;
+  border-radius: $radius-lg;
+  padding: 20px;
+  margin-bottom: 16px;
+  border: none;
+  box-shadow: none;
+}
+
+.inputLabel {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: $gray-600;
+  margin-bottom: 10px;
+}
+
+.codeInput {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid $gray-200;
+  border-radius: $radius-lg;
+  font-size: 15px;
+  background: white;
+  transition: border-color 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: $gray-400;
+  }
+
+  &::placeholder {
+    color: $gray-400;
+  }
+}
+
+.error {
+  font-size: 13px;
+  color: $error;
+  margin-top: 10px;
+}
+
+.hint {
+  font-size: 13px;
+  color: $gray-500;
+  margin-top: 10px;
+}
+
+.submitButton {
+  margin-top: 20px;
+  border-radius: $radius-lg;
+}
+
+.section {
+  margin-top: 32px;
+}
+
+.sectionTitle {
+  @include section-title;
+}
+
+.guideCard {
+  background: white;
+  border: none;
+  box-shadow: none;
+}
+
+.guideList {
+  @include flex-column;
+  gap: 7px;
+
+  li {
+    position: relative;
+    padding-left: 13px;
+    font-size: 13px;
+    color: $gray-700;
+    line-height: 1.5;
+
+    &::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: $gray-600;
+    }
+  }
+}
