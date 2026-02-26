@@ -2,17 +2,9 @@
 
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
 import { Button } from '@/components/ui';
 import { MobileLayout } from '@/components/layout';
-import {
-  getKakaoAuthUrl,
-  exchangeKakaoCode,
-  setPendingJoin,
-  APP_SCHEME,
-  PENDING_KAKAO_CODE_KEY,
-  KAKAO_DEEPLINK_EVENT,
-} from '@/lib/kakao-auth';
+import { exchangeKakaoCode, getKakaoAuthUrl, setPendingJoin } from '@/lib/kakao-auth';
 import { loginSns, setAccessToken } from '@/lib/api';
 import styles from './page.module.scss';
 
@@ -41,22 +33,15 @@ function LoginContent() {
     (errorCode ? (ERROR_MESSAGES[errorCode] ?? ERROR_MESSAGES.Default) : null);
   const showCode = Boolean(errorCode && !ERROR_MESSAGES[errorCode]);
 
-  const processCode = (code: string) => {
-    if (handlingRef.current || !code) return;
+  const processKakaoUser = (user: { id: string; email?: string; name?: string; profileImage?: string | null }) => {
+    if (handlingRef.current || !user?.id) return;
     handlingRef.current = true;
-    sessionStorage.removeItem(PENDING_KAKAO_CODE_KEY);
     (async () => {
       try {
-        const result = await exchangeKakaoCode(code);
-        if (!result.success) {
-          setNativeError(result.error || '토큰 교환 실패');
-          return;
-        }
-        const { user } = result;
         const loginResult = await loginSns({
           provider: 'kakao',
-          providerId: user.id,
-          email: user.email || '',
+          providerId: String(user.id),
+          email: String(user.email ?? ''),
         });
         if (loginResult.success && 'accessToken' in loginResult && loginResult.accessToken) {
           setAccessToken(loginResult.accessToken);
@@ -66,10 +51,10 @@ function LoginContent() {
         if ('needJoin' in loginResult && loginResult.needJoin) {
           setPendingJoin({
             provider: 'kakao',
-            providerId: user.id,
-            email: user.email || '',
-            name: user.name || '',
-            image: user.profileImage || null,
+            providerId: String(user.id),
+            email: String(user.email ?? ''),
+            name: String(user.name ?? ''),
+            image: user.profileImage ?? null,
           });
           router.replace('/login/nickname/');
         } else {
@@ -83,67 +68,73 @@ function LoginContent() {
     })();
   };
 
-  // 딥링크 code 처리: 이벤트 또는 sessionStorage (KakaoDeepLinkCapture가 저장 후 /login/으로 옴)
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const onCode = (e: Event) => {
-      const code = (e as CustomEvent<{ code: string }>).detail?.code;
-      if (code) processCode(code);
-    };
-    window.addEventListener(KAKAO_DEEPLINK_EVENT, onCode);
-    const codeFromStorage = sessionStorage.getItem(PENDING_KAKAO_CODE_KEY);
-    if (codeFromStorage) processCode(codeFromStorage);
-    return () => window.removeEventListener(KAKAO_DEEPLINK_EVENT, onCode);
-  }, [router]);
-
-  // 웹: callback이 ?code=...&from=kakao 로 리다이렉트한 경우
+  // 웹·로컬: URL에 ?code=...&from=kakao 로 들어온 경우 (카카오 → callback → /login 리다이렉트)
   useEffect(() => {
     const code = searchParams.get('code');
     const from = searchParams.get('from');
+    const redirectUri = searchParams.get('redirect_uri') ?? undefined;
     if (!code || from !== 'kakao' || handlingRef.current) return;
-    processCode(code);
+    handlingRef.current = true;
+    exchangeKakaoCode(code, redirectUri)
+      .then((result) => {
+        if (result.success && result.user) {
+          processKakaoUser(result.user);
+        } else {
+          setNativeError(result.success ? '' : (result.error || '토큰 교환 실패'));
+        }
+      })
+      .catch(() => setNativeError('로그인 처리 중 오류가 발생했습니다.'))
+      .finally(() => {
+        handlingRef.current = false;
+      });
   }, [searchParams]);
+
+  const runNativeKakaoLogin = async () => {
+    const { KakaoLoginPlugin } = await import(/* webpackIgnore: true */ 'capacitor-kakao-login-plugin');
+    const res = await KakaoLoginPlugin.goLogin();
+    const resAny = res as { id?: string; userId?: string; openId?: string; email?: string; nickname?: string; profileImage?: string };
+    const id = resAny?.id ?? resAny?.userId ?? resAny?.openId;
+    if (!id) {
+      setNativeError('카카오 로그인에 실패했습니다.');
+      return;
+    }
+    let userInfo: { id?: string; nickname?: string; email?: string; profile_image_url?: string } = {};
+    try {
+      const infoRes = await KakaoLoginPlugin.getUserInfo();
+      if (infoRes?.value && typeof infoRes.value === 'object') {
+        userInfo = infoRes.value as typeof userInfo;
+      }
+    } catch {
+      // ignore
+    }
+    const userId = String(id);
+    const email = String(userInfo?.email ?? resAny?.email ?? '');
+    const name = String(userInfo?.nickname ?? resAny?.nickname ?? '');
+    const profileImage = userInfo?.profile_image_url ?? resAny?.profileImage ?? null;
+    processKakaoUser({ id: userId, email, name, profileImage });
+  };
 
   const handleKakaoLogin = async () => {
     setNativeError(null);
     if (typeof window === 'undefined') return;
+    const isLocalhost =
+      window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+    // localhost: 웹 개발용 Redirect URI 플로우
+    if (isLocalhost) {
+      try {
+        window.location.href = getKakaoAuthUrl();
+      } catch (err) {
+        setNativeError(err instanceof Error ? err.message : '카카오 로그인을 시작할 수 없습니다.');
+      }
+      return;
+    }
+
+    // 그 외(앱 WebView 222.x, 실기기 등): 네이티브 로그인 시도 (isNativePlatform 안 써도 플러그인 있으면 동작)
     try {
-      const url = getKakaoAuthUrl();
-      const isWeb = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      if (isWeb) {
-        signIn('kakao', { callbackUrl: '/login/complete/', redirect: true });
-        return;
-      }
-      const cap = await import('@capacitor/core').catch(() => null);
-      const app = await import('@capacitor/app').catch(() => null);
-      const browser = await import('@capacitor/browser').catch(() => null);
-      const isNative = cap?.Capacitor?.isNativePlatform?.() && app?.App && browser?.Browser;
-      if (isNative && app?.App && browser?.Browser) {
-        const remove = await app.App.addListener('appUrlOpen', async (ev: { url: string }) => {
-          const u = ev?.url || '';
-          if (!u.includes(`${APP_SCHEME}://kakao`) || handlingRef.current) return;
-          try {
-            remove.remove();
-            (browser.Browser as { close?: () => Promise<void> }).close?.();
-          } catch { /* ignore */ }
-          const parsed = new URL(u);
-          const code = parsed.searchParams.get('code');
-          const err = parsed.searchParams.get('error');
-          if (err) {
-            setNativeError(decodeURIComponent(err));
-            return;
-          }
-          if (code) {
-            sessionStorage.setItem(PENDING_KAKAO_CODE_KEY, code);
-            window.dispatchEvent(new CustomEvent(KAKAO_DEEPLINK_EVENT, { detail: { code } }));
-          }
-        });
-        await browser.Browser.open({ url });
-        return;
-      }
-      window.location.href = url;
-    } catch (err) {
-      setNativeError(err instanceof Error ? err.message : '카카오 로그인을 시작할 수 없습니다.');
+      await runNativeKakaoLogin();
+    } catch {
+      setNativeError('앱에서 로그인해 주세요.');
     }
   };
 

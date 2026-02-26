@@ -22,17 +22,6 @@ export default function HomePage() {
   }, [status, router]);
 
   const isLoggedIn = status === 'authenticated' || hasToken;
-  const loading = status === 'loading' && !hasToken;
-
-  if (loading) {
-    return (
-      <MobileLayout>
-        <main className={styles.main} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
-          로딩 중...
-        </main>
-      </MobileLayout>
-    );
-  }
 
   if (!isLoggedIn) return null;
 

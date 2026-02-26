@@ -4,4 +4,6 @@
     <string name="title_activity_main">썸타요</string>
     <string name="package_name">com.sumtayo.app</string>
     <string name="custom_url_scheme">com.sumtayo.app</string>
+    <string name="kakao_app_key">9f7d28aa1c802cc70d5b7e053b067d4c</string>
+    <string name="kakao_scheme">kakao9f7d28aa1c802cc70d5b7e053b067d4c</string>
 </resources>

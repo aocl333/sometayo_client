@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next';
 import { AuthProvider } from '@/components/providers';
-import KakaoDeepLinkCapture from '@/components/KakaoDeepLinkCapture';
 import '@/styles/globals.scss';
 
 export const metadata: Metadata = {
@@ -40,7 +39,6 @@ export default function RootLayout({
       </head>
       <body>
         <AuthProvider>
-          <KakaoDeepLinkCapture />
           {children}
         </AuthProvider>
       </body>

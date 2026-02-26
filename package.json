@@ -21,6 +21,7 @@
     "@capacitor/cli": "^8.0.2",
     "@capacitor/core": "^8.0.2",
     "@capacitor/ios": "^8.0.2",
+    "capacitor-kakao-login-plugin": "^3.0.0",
     "dayjs": "^1.11.11",
     "framer-motion": "^11.2.0",
     "lucide-react": "^0.395.0",

@@ -3,8 +3,8 @@ import { config as loadEnv } from 'dotenv';
 
 loadEnv({ path: '.env.local' });
 
-const devServer = process.env.CAPACITOR_DEV_SERVER;
-const serverUrl = process.env.CAPACITOR_SERVER_URL;
+// 개발: CAPACITOR_DEV_SERVER (예: http://본인PC_IP:3000). 배포: CAPACITOR_SERVER_URL (예: https://도메인)
+const serverUrl = process.env.CAPACITOR_DEV_SERVER || process.env.CAPACITOR_SERVER_URL;
 
 const config: CapacitorConfig = {
   appId: 'com.sumtayo.app',
@@ -12,8 +12,7 @@ const config: CapacitorConfig = {
   webDir: 'out',
   server: {
     androidScheme: 'https',
-    // 배포 URL 또는 로컬 개발 서버 사용 시에만 url 설정
-    ...(devServer || serverUrl ? { url: devServer || serverUrl } : {}),
+    ...(serverUrl && { url: serverUrl }),
   },
   plugins: {
     SplashScreen: {
