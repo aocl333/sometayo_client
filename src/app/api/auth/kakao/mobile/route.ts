@@ -15,23 +15,38 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const params = new URLSearchParams({
-      grant_type: 'authorization_code',
-      client_id: process.env.KAKAO_CLIENT_ID!,
-      redirect_uri: redirectUri,
-      code,
-      client_secret: process.env.KAKAO_CLIENT_SECRET || 'kakao',
-    });
+    const reqUrl = req.headers.get('origin') || req.headers.get('referer')?.replace(/\/login.*$/, '') || '';
+    const origin = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_APP_URL || reqUrl || '';
+    const base = origin.replace(/\/$/, '');
+    const altUris = base
+      ? [redirectUri, `${base}/api/auth/kakao/callback`]
+      : [redirectUri];
+    const redirectCandidates = Array.from(new Set(altUris)).filter(Boolean);
 
-    const tokenRes = await fetch('https://kauth.kakao.com/oauth/token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: params.toString(),
-    });
+    let tokenRes: Response | null = null;
+    let lastError = '';
 
-    if (!tokenRes.ok) {
-      const err = await tokenRes.text();
-      console.error('Kakao token error:', err);
+    for (const uri of redirectCandidates) {
+      const params = new URLSearchParams({
+        grant_type: 'authorization_code',
+        client_id: process.env.KAKAO_CLIENT_ID!,
+        redirect_uri: uri,
+        code,
+        client_secret: process.env.KAKAO_CLIENT_SECRET || 'kakao',
+      });
+
+      tokenRes = await fetch('https://kauth.kakao.com/oauth/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString(),
+      });
+
+      if (tokenRes.ok) break;
+      lastError = await tokenRes.text();
+    }
+
+    if (!tokenRes || !tokenRes.ok) {
+      console.error('Kakao token error:', lastError);
       return NextResponse.json(
         { error: '카카오 토큰 교환 실패' },
         { status: 401 }

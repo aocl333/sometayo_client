@@ -32,16 +32,10 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/kakao_scheme" android:host="kakaolink" />
-            </intent-filter>
 
         </activity>
 
-        <!-- 카카오 SDK OAuth 콜백 -->
+        <!-- 카카오 SDK OAuth 콜백 (블로그와 동일: kakaolink + oauth 한 activity에서 처리) -->
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
@@ -49,7 +43,8 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/kakao_scheme" android:host="oauth" />
+                <data android:host="kakaolink" android:scheme="@string/kakao_scheme" />
+                <data android:host="oauth" android:scheme="@string/kakao_scheme" />
             </intent-filter>
         </activity>
 
