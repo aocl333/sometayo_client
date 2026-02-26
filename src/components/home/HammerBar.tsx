@@ -3,12 +3,11 @@
 import { useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
 import { Card } from '@/components/ui';
-import { mockUser } from '@/mocks/user';
 import styles from './HammerBar.module.scss';
 
 export default function HammerBar() {
   const router = useRouter();
-  const hammers = mockUser.stats.hammers;
+  const hammers = 0;
 
   return (
     <div className={styles.container}>

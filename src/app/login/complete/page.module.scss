@@ -1,0 +1,13 @@
+@use '@/styles/variables' as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.text {
+  font-size: 15px;
+  color: $gray-500;
+}

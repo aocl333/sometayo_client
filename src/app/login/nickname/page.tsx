@@ -1,17 +1,41 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { MobileLayout, Header } from '@/components/layout';
 import { Button } from '@/components/ui';
-import { checkNicknameDuplicate, updateUserProfile } from '@/lib/api';
+import { checkNicknameDuplicate, joinSns, setAccessToken } from '@/lib/api';
+import { getPendingJoin, clearPendingJoin } from '@/lib/kakao-auth';
 import styles from './page.module.scss';
+
+const DEFAULT_PHONE = '01000000000'; // 카카오 미제공
 
 export default function NicknamePage() {
   const router = useRouter();
+  const { data: session } = useSession();
   const [nickname, setNickname] = useState('');
   const [duplicateError, setDuplicateError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const initialFilled = useRef(false);
+  const pendingJoin = getPendingJoin();
+
+  // 웹도 앱도 아닌 상태로 이 페이지 접근 시 로그인으로
+  useEffect(() => {
+    if (!session?.user && !pendingJoin) {
+      router.replace('/login');
+    }
+  }, [session?.user, pendingJoin, router]);
+
+  // 카카오에서 받아온 닉네임 있으면 먼저 채움 (웹: session, 앱: pendingJoin)
+  useEffect(() => {
+    if (initialFilled.current) return;
+    const name = session?.user?.name ?? pendingJoin?.name;
+    if (name != null && String(name).trim() !== '') {
+      setNickname(String(name).trim());
+      initialFilled.current = true;
+    }
+  }, [session?.user?.name, pendingJoin?.name]);
 
   const trimmed = nickname.trim();
   const isValid = trimmed.length >= 2;
@@ -29,8 +53,23 @@ export default function NicknamePage() {
         setSubmitting(false);
         return;
       }
-      await updateUserProfile({ nickname: trimmed });
-      router.replace('/');
+      const email = session?.user?.email ?? pendingJoin?.email ?? '';
+      const provider = session?.user?.provider ?? pendingJoin?.provider ?? 'kakao';
+      const providerId = session?.user?.providerId ?? pendingJoin?.providerId ?? '';
+      const image = session?.user?.image ?? pendingJoin?.image ?? '';
+      const joinOk = await joinSns({
+        email,
+        provider,
+        providerId,
+        nickname: trimmed,
+        phone: DEFAULT_PHONE,
+        profileImagePath: image,
+      });
+      if (joinOk.success && 'accessToken' in joinOk && joinOk.accessToken) {
+        clearPendingJoin();
+        setAccessToken(joinOk.accessToken);
+        router.replace('/');
+      }
     } catch {
       setDuplicateError(false);
     } finally {

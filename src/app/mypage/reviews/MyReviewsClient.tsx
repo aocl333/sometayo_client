@@ -6,13 +6,11 @@ import { MessageSquare } from 'lucide-react';
 import { MobileLayout, Header, BottomNav } from '@/components/layout';
 import { Card, StarRating } from '@/components/ui';
 import { mockStores, mockReviews } from '@/mocks/stores';
-import { mockUser } from '@/mocks/user';
 import styles from './page.module.scss';
 
 export default function MyReviewsClient() {
   const router = useRouter();
 
-  // 날짜 포맷팅 함수 (2026.01.20 형식)
   const formatDate = (date: Date | string) => {
     const d = new Date(date);
     const year = d.getFullYear();
@@ -21,10 +19,9 @@ export default function MyReviewsClient() {
     return `${year}.${month}.${day}`;
   };
 
-  // 현재 사용자의 리뷰 필터링 (퍼블리싱 단계: 모든 리뷰를 내 리뷰로 표시)
   const myReviews = mockReviews.map((review) => ({
     ...review,
-    userId: mockUser.id,
+    userId: '',
   }));
 
   // 리뷰에 가맹점 정보 연결

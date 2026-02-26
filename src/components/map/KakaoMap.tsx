@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef, useState, useCallback, useEffect } from 'react';
-import { mockStores, TEST_STORE_ID } from '@/mocks/stores';
 import { mockTreasures } from '@/mocks/treasures';
 import type { Store } from '@/types';
 import type { TreasureSpot } from '@/types';
@@ -28,10 +27,11 @@ type MarkerType = 'store' | 'treasure';
 
 interface KakaoMapProps {
   filter: 'all' | MarkerType;
+  stores?: Store[];
   onMarkerClick: (type: MarkerType, data: Store | TreasureSpot) => void;
 }
 
-export default function KakaoMap({ filter, onMarkerClick }: KakaoMapProps) {
+export default function KakaoMap({ filter, stores = [], onMarkerClick }: KakaoMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<KakaoMapInstance | null>(null);
   const userMarkerRef = useRef<KakaoMarkerInstance | null>(null);
@@ -120,31 +120,8 @@ export default function KakaoMap({ filter, onMarkerClick }: KakaoMapProps) {
       }
       userMarkerRef.current = userMarker;
 
-      // 가맹점 마커: ico_shop.svg 아이콘 사용, 클릭 시 바텀시트(가맹점 정보) 표시
-      const storeIconUrl =
-        typeof window !== 'undefined' ? `${window.location.origin}/images/ico_shop.svg` : '/images/ico_shop.svg';
-      const kmapsForStore = window.kakao?.maps as {
-        MarkerImage?: new (src: string, size: unknown, opts?: { offset?: unknown }) => unknown;
-        Size?: new (w: number, h: number) => unknown;
-        Point?: new (x: number, y: number) => unknown;
-      };
-      const storesToShow = mockStores.filter((s) => s.id === TEST_STORE_ID);
-      storeMarkersRef.current = storesToShow.map((store) => {
-        const pos = new k.LatLng(store.position.lat, store.position.lng);
-        const marker = new k.Marker({ position: pos, map });
-        if (typeof kmapsForStore?.MarkerImage === 'function') {
-          const size =
-            typeof kmapsForStore.Size === 'function' ? new kmapsForStore.Size(30, 30) : { width: 36, height: 36 };
-          const offset =
-            typeof kmapsForStore.Point === 'function' ? new kmapsForStore.Point(18, 36) : { x: 18, y: 36 };
-          const storeMarkerImage = new kmapsForStore.MarkerImage(storeIconUrl, size, { offset });
-          if (typeof (marker as { setImage?: (img: unknown) => void }).setImage === 'function') {
-            (marker as { setImage: (img: unknown) => void }).setImage(storeMarkerImage);
-          }
-        }
-        k.event.addListener(marker, 'click', () => onMarkerClickRef.current('store', store));
-        return marker;
-      });
+      // 가맹점 마커는 stores prop이 채워진 뒤 별도 useEffect에서 그림 (여기서는 빈 배열로 초기화)
+      storeMarkersRef.current = [];
 
       // 테스트: 관광지 마커 1개만 표시하므로 보물상자 마커는 비움
       treasureMarkersRef.current = mockTreasures.filter(() => false).map((treasure) => {
@@ -182,6 +159,43 @@ export default function KakaoMap({ filter, onMarkerClick }: KakaoMapProps) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- 지도는 한 번만 초기화. onMarkerClick은 ref로 최신 유지.
   }, []);
+
+  // 가맹점 목록(stores)이 있으면 지도에 마커 그리기
+  useEffect(() => {
+    if (!mapReady || !mapRef.current || !window.kakao?.maps?.LatLng || stores.length === 0) {
+      storeMarkersRef.current = [];
+      return;
+    }
+    const k = window.kakao.maps;
+    const map = mapRef.current;
+    const storeIconUrl =
+      typeof window !== 'undefined' ? `${window.location.origin}/images/ico_shop.svg` : '/images/ico_shop.svg';
+    const kmapsForStore = window.kakao?.maps as {
+      MarkerImage?: new (src: string, size: unknown, opts?: { offset?: unknown }) => unknown;
+      Size?: new (w: number, h: number) => unknown;
+      Point?: new (x: number, y: number) => unknown;
+    };
+    // 기존 스토어 마커 제거
+    storeMarkersRef.current.forEach((m) => m.setMap(null));
+    storeMarkersRef.current = stores.map((store) => {
+      const pos = new k.LatLng(store.position.lat, store.position.lng);
+      const marker = new k.Marker({ position: pos, map });
+      if (typeof kmapsForStore?.MarkerImage === 'function') {
+        const size =
+          typeof kmapsForStore.Size === 'function' ? new kmapsForStore.Size(30, 30) : { width: 36, height: 36 };
+        const offset =
+          typeof kmapsForStore.Point === 'function' ? new kmapsForStore.Point(18, 36) : { x: 18, y: 36 };
+        const storeMarkerImage = new kmapsForStore.MarkerImage(storeIconUrl, size, { offset });
+        if (typeof (marker as { setImage?: (img: unknown) => void }).setImage === 'function') {
+          (marker as { setImage: (img: unknown) => void }).setImage(storeMarkerImage);
+        }
+      }
+      k.event.addListener(marker, 'click', () => onMarkerClickRef.current('store', store));
+      return marker;
+    });
+    const showStore = filter === 'all' || filter === 'store';
+    storeMarkersRef.current.forEach((m) => m.setMap(showStore ? map : null));
+  }, [mapReady, filter, stores]);
 
   // 필터에 따라 마커 표시/숨김
   useEffect(() => {

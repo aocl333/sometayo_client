@@ -1,12 +1,27 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, Badge } from '@/components/ui';
-import { mockStores, formatDistance } from '@/mocks/stores';
+import { formatDistance } from '@/mocks/stores';
+import { getStoreList } from '@/lib/api';
+import type { Store } from '@/types';
 import styles from './StoreList.module.scss';
 
 export default function StoreList() {
   const router = useRouter();
+  const [stores, setStores] = useState<Store[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    getStoreList().then((list) => {
+      if (!cancelled) setStores(list);
+    }).finally(() => {
+      if (!cancelled) setLoading(false);
+    });
+    return () => { cancelled = true; };
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -21,7 +36,10 @@ export default function StoreList() {
       </div>
 
       <div className={styles.list}>
-        {mockStores.slice(0, 5).map((store) => (
+        {!loading && stores.length === 0 ? (
+          <p className={styles.empty}>표시할 가맹점이 없습니다.</p>
+        ) : !loading ? (
+          stores.slice(0, 5).map((store) => (
           <Card
             key={store.id}
             className={styles.storeCard}
@@ -51,7 +69,8 @@ export default function StoreList() {
               </Badge>
             </div>
           </Card>
-        ))}
+          ))
+        ) : null}
       </div>
     </div>
   );

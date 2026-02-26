@@ -6,11 +6,10 @@ import { MobileLayout, Header, BottomNav } from '@/components/layout';
 import { Card } from '@/components/ui';
 import { TreasureBox, GradeFilter } from '@/components/treasure';
 import { mockTreasures } from '@/mocks/treasures';
-import { mockUser } from '@/mocks/user';
 import styles from './page.module.scss';
 
 export default function TreasurePage() {
-  const [hammers, setHammers] = useState(mockUser.stats.hammers);
+  const [hammers, setHammers] = useState(0);
 
   const handleHammerUsed = () => {
     setHammers((prev) => Math.max(0, prev - 1));

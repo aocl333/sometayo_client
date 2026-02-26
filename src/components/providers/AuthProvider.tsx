@@ -37,21 +37,9 @@ function BackendAuthSync() {
         });
 
         if (!result.success && 'needJoin' in result && result.needJoin) {
-          const joinOk = await joinSns({
-            email: email ?? '',
-            provider,
-            providerId,
-            nickname: name ?? email ?? 'user',
-            phone: '01076494556', // 카카오 미제공. 임시 값
-            profileImagePath: image ?? '',
-          });
-          if (joinOk.success && 'accessToken' in joinOk && joinOk.accessToken) {
-            setAccessToken(joinOk.accessToken);
-            return;
-          }
-          if (joinOk.success) {
-            result = await loginSns({ provider, providerId, email: email ?? '' });
-          }
+          // 최초 가입: 닉네임 페이지에서 joinSns(닉네임) 호출 후 메인으로 보냄
+          router.push('/login/nickname/');
+          return;
         }
 
         if (result.success && 'accessToken' in result) {

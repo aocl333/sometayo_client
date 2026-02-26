@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "build:app": "next build && npx cap sync",
+    "build:app": "npx cross-env CAPACITOR=1 next build && npx cap sync",
     "build:android": "node -e \"require('fs').mkdirSync('out',{recursive:true});if(!require('fs').existsSync('out/index.html'))require('fs').writeFileSync('out/index.html','<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content=width=device-width,initial-scale=1><title>로딩중</title></head><body><p>로딩중...</p></body></html>')\" && npx cap sync android",
     "open:android": "npx cap open android",
     "open:ios": "npx cap open ios",
@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "@capacitor/android": "^8.0.2",
+    "@capacitor/app": "^8.0.0",
+    "@capacitor/browser": "^8.0.0",
     "@capacitor/cli": "^8.0.2",
     "@capacitor/core": "^8.0.2",
     "@capacitor/ios": "^8.0.2",
@@ -30,6 +32,7 @@
     "sass": "^1.77.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "@types/node": "^20.12.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",

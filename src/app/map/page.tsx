@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Package, Store } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
@@ -8,27 +8,30 @@ import Image from 'next/image';
 import { MobileLayout, Header, BottomNav } from '@/components/layout';
 import { Button, Badge } from '@/components/ui';
 import KakaoMap from '@/components/map/KakaoMap';
-import { mockStores, formatDistance } from '@/mocks/stores';
+import { formatDistance } from '@/mocks/stores';
 import { mockTreasures, GRADE_CONFIG } from '@/mocks/treasures';
+import { getStoreList } from '@/lib/api';
+import type { Store as StoreType } from '@/types';
 import styles from './page.module.scss';
 
 type MarkerType = 'store' | 'treasure';
 
 interface SelectedItem {
   type: MarkerType;
-  data: typeof mockStores[0] | typeof mockTreasures[0];
+  data: StoreType | typeof mockTreasures[0];
 }
 
 export default function MapPage() {
   const router = useRouter();
+  const [stores, setStores] = useState<StoreType[]>([]);
   const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
   const [filter, setFilter] = useState<MarkerType | 'all'>('all');
 
-  // 필터링된 마커들
-  const showStores = filter === 'all' || filter === 'store';
-  const showTreasures = filter === 'all' || filter === 'treasure';
+  useEffect(() => {
+    getStoreList().then(setStores);
+  }, []);
 
-  const handleMarkerClick = (type: MarkerType, data: typeof mockStores[0] | typeof mockTreasures[0]) => {
+  const handleMarkerClick = (type: MarkerType, data: StoreType | typeof mockTreasures[0]) => {
     setSelectedItem({ type, data });
   };
 
@@ -36,7 +39,7 @@ export default function MapPage() {
     if (!selectedItem) return;
     
     if (selectedItem.type === 'store') {
-      router.push(`/store/${(selectedItem.data as typeof mockStores[0]).id}`);
+      router.push(`/store/${(selectedItem.data as StoreType).id}`);
     } else {
       router.push('/treasure');
     }
@@ -75,6 +78,7 @@ export default function MapPage() {
         <div className={`${styles.mapContainer} ${selectedItem ? styles.mapContainerWithSheet : ''}`}>
           <KakaoMap
             filter={filter}
+            stores={stores}
             onMarkerClick={handleMarkerClick}
           />
         </div>
@@ -106,15 +110,15 @@ export default function MapPage() {
                     <div className={styles.sheetMeta}>
                       <span className={styles.rating}>
                         <Image src="/images/ico_star.svg" alt="별점" width={16} height={16} />
-                        {(selectedItem.data as typeof mockStores[0]).rating}
+                        {(selectedItem.data as StoreType).rating}
                       </span>
                       <span className={styles.distance}>
                         <Image src="/images/ico_map.svg" alt="위치" width={16} height={16} />
-                        {formatDistance((selectedItem.data as typeof mockStores[0]).distance || 0)}
+                        {formatDistance((selectedItem.data as StoreType).distance || 0)}
                       </span>
                     </div>
                     <Badge variant="primary" size="sm">
-                      {(selectedItem.data as typeof mockStores[0]).benefit.description}
+                      {(selectedItem.data as StoreType).benefit.description}
                     </Badge>
                   </div>
                   <Button 

@@ -6,12 +6,11 @@ import { Calendar, MapPin } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { MobileLayout, Header, BottomNav } from '@/components/layout';
 import { Card } from '@/components/ui';
-import { mockUser } from '@/mocks/user';
 import styles from './page.module.scss';
 
 export default function TicketPage() {
   const router = useRouter();
-  const ticket = mockUser.ticket;
+  const ticket = undefined;
 
   useEffect(() => {
     if (!ticket) {

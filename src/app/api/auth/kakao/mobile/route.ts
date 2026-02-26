@@ -56,12 +56,14 @@ export async function POST(req: NextRequest) {
     }
 
     const kakaoUser = await userRes.json();
-    const profile = kakaoUser.kakao_account?.profile || {};
+    const account = kakaoUser.kakao_account || {};
+    const profile = account.profile || {};
 
     const user = {
       id: String(kakaoUser.id),
       kakaoId: String(kakaoUser.id),
       name: profile.nickname || `user_${kakaoUser.id}`,
+      email: (account.email as string) || '',
       profileImage: profile.profile_image_url || null,
       accessToken,
     };

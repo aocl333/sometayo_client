@@ -1,11 +1,12 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { MobileLayout, Header, BottomNav } from '@/components/layout';
 import { Card } from '@/components/ui';
-import { mockUser } from '@/mocks/user';
+import { getUserInfo, type UserInfo } from '@/lib/api';
 import styles from './page.module.scss';
 
 interface MenuItem {
@@ -16,14 +17,24 @@ interface MenuItem {
   badge?: string;
 }
 
+const defaultStats = { hammers: 0, lottoNumbers: [null, null, null, null, null, null] as (number | null)[], prizesCount: 0, reviewsCount: 0 };
+
 export default function MyPage() {
   const router = useRouter();
   const { data: session } = useSession();
-  const { stats } = mockUser;
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const stats = defaultStats;
 
-  // 로그인한 사용자 이름 (카카오 닉네임 또는 기본값)
-  const userName = session?.user?.name || mockUser.name;
+  useEffect(() => {
+    let mounted = true;
+    getUserInfo().then((info) => {
+      if (mounted) setUserInfo(info);
+    });
+    return () => { mounted = false; };
+  }, []);
 
+  const userName = userInfo?.nickname || session?.user?.name || '';
+  const profileImage = userInfo?.profileImagePath || session?.user?.image;
   const travelMenus: MenuItem[] = [
     { icon: '/images/ico_flight_bk.svg', label: '여행권', path: '/ticket' },
     { icon: '/images/ico_treasure_bk.svg', label: '보물상자', path: '/treasure' },
@@ -49,10 +60,10 @@ export default function MyPage() {
         <section className={styles.profileSection}>
           <div className={styles.profileCard}>
             <div className={styles.avatar}>
-              {session?.user?.image ? (
-                <img src={session.user.image} alt="프로필" />
+              {profileImage ? (
+                <img src={profileImage} alt="프로필" />
               ) : (
-                <span>👤</span>
+                <span></span>
               )}
             </div>
             <div className={styles.profileInfo}>
@@ -153,7 +164,7 @@ export default function MyPage() {
             <button
               className={`${styles.menuItem} ${styles.logout}`}
               onClick={() => {
-                signOut({ redirect: false }).then(() => router.push('/login'));
+                signOut({ redirect: false }).then(() => router.push('/login/'));
               }}
             >
               <div className={styles.menuLeft}>
