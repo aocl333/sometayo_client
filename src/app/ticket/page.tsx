@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Calendar, MapPin } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
@@ -8,9 +8,11 @@ import { MobileLayout, Header, BottomNav } from '@/components/layout';
 import { Card } from '@/components/ui';
 import styles from './page.module.scss';
 
+type Ticket = { code: string; expiresAt: string; visitCount: number; days?: number };
+
 export default function TicketPage() {
   const router = useRouter();
-  const ticket = undefined;
+  const [ticket] = useState<Ticket | undefined>(undefined);
 
   useEffect(() => {
     if (!ticket) {
