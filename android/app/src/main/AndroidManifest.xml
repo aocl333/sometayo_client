@@ -33,6 +33,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+            <!-- 백엔드 카카오 콜백 후 sumtayo:// 로 앱 복귀 -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="sumtayo" android:host="auth" android:pathPrefix="/kakao/callback" />
+            </intent-filter>
+
         </activity>
 
         <!-- 카카오 SDK OAuth 콜백 (블로그와 동일: kakaolink + oauth 한 activity에서 처리) -->

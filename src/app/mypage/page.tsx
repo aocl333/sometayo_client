@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { signOut, useSession } from 'next-auth/react';
+import { useSession } from '@/components/providers';
 import Image from 'next/image';
 import { MobileLayout, Header, BottomNav } from '@/components/layout';
 import { Card } from '@/components/ui';
@@ -21,7 +21,7 @@ const defaultStats = { hammers: 0, lottoNumbers: [null, null, null, null, null, 
 
 export default function MyPage() {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, signOut } = useSession();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const stats = defaultStats;
 
@@ -164,7 +164,7 @@ export default function MyPage() {
             <button
               className={`${styles.menuItem} ${styles.logout}`}
               onClick={() => {
-                signOut({ redirect: false }).then(() => router.push('/login/'));
+                signOut().then(() => router.push('/login/'));
               }}
             >
               <div className={styles.menuLeft}>

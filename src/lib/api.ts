@@ -8,10 +8,16 @@ export function getAccessToken(): string | null {
 }
 export function setAccessToken(token: string): void {
   const t = typeof token === 'string' ? token.trim() : '';
-  if (t && typeof window !== 'undefined') localStorage.setItem(TOKEN_KEY, t);
+  if (t && typeof window !== 'undefined') {
+    localStorage.setItem(TOKEN_KEY, t);
+    window.dispatchEvent(new CustomEvent('auth-token-change'));
+  }
 }
 export function clearAccessToken(): void {
-  if (typeof window !== 'undefined') localStorage.removeItem(TOKEN_KEY);
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem(TOKEN_KEY);
+    window.dispatchEvent(new CustomEvent('auth-token-change'));
+  }
 }
 
 /** 공통: JWT 헤더 - Authorization에 토큰 그대로 */
@@ -106,6 +112,7 @@ export async function getUserInfo(): Promise<UserInfo | null> {
   const token = getAccessToken();
   if (!token) return null;
   const res = await fetch(`${BASE}/app_user/user/info`, {
+    cache: 'no-store',
     headers: {
       'Content-Type': 'application/json',
       ...authHeaders(token),
@@ -230,7 +237,13 @@ export async function apiRequest<T>(path: string, options: RequestInit = {}): Pr
     ...authHeaders(getAccessToken()),
     ...(options.headers as Record<string, string>),
   };
-  const res = await fetch(url, { ...options, headers });
+  const res = await fetch(url, { ...options, headers, cache: 'no-store' });
   if (!res.ok) throw new Error(`API Error: ${res.status}`);
-  return res.json();
+  const text = await res.text();
+  if (!text.trim()) return {} as T;
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    return {} as T;
+  }
 }

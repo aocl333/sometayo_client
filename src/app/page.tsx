@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/components/providers';
 import { useRouter } from 'next/navigation';
 import { getAccessToken } from '@/lib/api';
 import { MobileLayout, Header, BottomNav, TicketButton, NotificationButton } from '@/components/layout';

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/components/providers';
 import { MobileLayout, Header } from '@/components/layout';
 import { Button } from '@/components/ui';
 import { checkNicknameDuplicate, joinSns, setAccessToken } from '@/lib/api';

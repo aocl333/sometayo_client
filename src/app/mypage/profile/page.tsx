@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/components/providers';
 import { MobileLayout, Header, BottomNav } from '@/components/layout';
 import { Button } from '@/components/ui';
 import { getUserInfo, updateUserProfile } from '@/lib/api';
@@ -16,13 +16,15 @@ export default function ProfileEditPage() {
   const [imageError, setImageError] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const initialLoadedRef = useRef(false);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.replace('/login');
       return;
     }
-    if (status !== 'authenticated') return;
+    if (status !== 'authenticated' || initialLoadedRef.current) return;
+    initialLoadedRef.current = true;
     let mounted = true;
     getUserInfo().then((info) => {
       if (!mounted) return;
@@ -35,7 +37,9 @@ export default function ProfileEditPage() {
       }
     });
     return () => { mounted = false; };
-  }, [session, status, router]);
+  }, [status, router, session?.user?.name, session?.user?.image]);
+
+  useEffect(() => () => { initialLoadedRef.current = false; }, []);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

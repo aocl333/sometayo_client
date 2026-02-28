@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/components/providers';
 import { ChevronRight } from 'lucide-react';
 import { Card } from '@/components/ui';
 import { mockCurrentRound, mockUserLottos, getDaysUntilDraw, formatPrize } from '@/mocks/lotto';

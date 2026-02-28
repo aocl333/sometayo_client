@@ -1,10 +1,12 @@
 import type { CapacitorConfig } from '@capacitor/cli';
+import path from 'path';
 import { config as loadEnv } from 'dotenv';
 
-loadEnv({ path: '.env.local' });
+// config 파일(프로젝트 루트) 기준 .env.local
+loadEnv({ path: path.resolve(__dirname, '.env.local') });
 
-// 개발: CAPACITOR_DEV_SERVER (예: http://본인PC_IP:3000). 배포: CAPACITOR_SERVER_URL (예: https://도메인)
-const serverUrl = process.env.CAPACITOR_DEV_SERVER || process.env.CAPACITOR_SERVER_URL;
+// 개발: CAPACITOR_DEV_SERVER (예: http://본인PC_IP:3000)
+const serverUrl = process.env.CAPACITOR_DEV_SERVER;
 
 const config: CapacitorConfig = {
   appId: 'com.sumtayo.app',

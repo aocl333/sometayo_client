@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { AuthProvider } from '@/components/providers';
+import AppUrlOpenHandler from '@/components/AppUrlOpenHandler';
 import '@/styles/globals.scss';
 
 export const metadata: Metadata = {
@@ -39,6 +40,7 @@ export default function RootLayout({
       </head>
       <body>
         <AuthProvider>
+          <AppUrlOpenHandler />
           {children}
         </AuthProvider>
       </body>
